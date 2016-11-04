@@ -39,7 +39,7 @@ export default function TabsSection() {
         <AccordionKey
           keyText='Second Key'
           keyId='2nd'
-          isDisabled={true}
+          isDisabled
         >
           Biltong swine venison boudin tri-tip. Turkey ham hock tenderloin boudin,
           capicola fatback ham brisket rump tongue frankfurter drumstick pork belly.
@@ -52,7 +52,7 @@ export default function TabsSection() {
           capicola fatback ham brisket rump tongue frankfurter drumstick pork belly.
         </AccordionKey>
       </Accordion>
-      <Accordion multiOpen={true}>
+      <Accordion multiOpen>
         <AccordionKey
           keyText='First Key'
           keyId='1st'
@@ -64,7 +64,7 @@ export default function TabsSection() {
         <AccordionKey
           keyText='Second Key'
           keyId='2nd'
-          isDisabled={true}
+          isDisabled
         >
           Biltong swine venison boudin tri-tip. Turkey ham hock tenderloin boudin,
           capicola fatback ham brisket rump tongue frankfurter drumstick pork belly.
@@ -72,7 +72,7 @@ export default function TabsSection() {
         <AccordionKey
           keyText='Third Key'
           keyId='3rd'
-          isOpen={true}
+          isOpen
         >
           Biltong swine venison boudin tri-tip. Turkey ham hock tenderloin boudin,
           capicola fatback ham brisket rump tongue frankfurter drumstick pork belly.

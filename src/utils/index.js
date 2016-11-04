@@ -2,34 +2,10 @@ import _ from 'lodash/fp'
 import { isValidElement } from 'react'
 import { girdleGlobals } from './girdle'
 
-const getProps = props => obj => _.map(prop => _.get(prop)(obj))(props)
-
-const callWithProps = (func, props) => container =>
-  func(...getProps(props)(container))
-
 export const ref = (context, propName) =>
    ({
      ref: el => context[propName] = el // eslint-disable-line no-return-assign
    })
-
-
-export const withContainer = (func, props, key) => container => {
-
-  const result = callWithProps(func, props)(container)
-
-  if (key) {
-
-    return {
-      ...container,
-      [key]: result
-    }
-
-  }
-
-  return result
-
-}
-
 
 export const isTypeComponent = type => child =>
   isValidElement(child) && _.get('type.displayName')(child) === type
