@@ -1,6 +1,7 @@
-const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
-const config = require('./webpack.config')
+import webpack from 'webpack'
+import WebpackDevServer from 'webpack-dev-server'
+import config from './webpack.config'
+
 const port = 3000
 
 new WebpackDevServer(webpack(config), {
@@ -11,7 +12,7 @@ new WebpackDevServer(webpack(config), {
     colors: true
   }
 })
-.listen(port, 'localhost', (err) => {
+.listen(port, 'localhost', err => {
 
   if (err) {
 
