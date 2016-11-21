@@ -29,17 +29,20 @@
   "dependencies": {
     "aphrodite": "0.6.0",
     "babel-cli": "6.16.0",
+    "babel-config-trainiac": "0.1.0",
     "babel-core": "6.17.0",
-    "eslint-config-trainiac-js-configs": "0.1.3",
-    "eslint-config-trainiac-node-configs": "0.1.3",
-    "eslint-config-trainiac-react-configs": "0.1.3",
+    "babel-loader": "6.2.5",
+    "copy-webpack-plugin": "3.0.1",
+    "css-loader": "0.25.0",
+    "eslint-config-trainiac": "0.1.0",
+    "extract-text-webpack-plugin": "1.0.1",
     "jquery": "3.1.1",
     "lodash": "4.16.4",
     "react": "15.3.2",
     "react-dom": "15.3.2",
     "react-hot-loader": "3.0.0-beta.5",
-    "trainiac-node-babel-configs": "0.1.3",
-    "trainiac-react-babel-configs": "0.1.3",
-    "trainiac-webpack-configs": "0.1.3"
+    "webpack": "1.13.2",
+    "webpack-config-trainiac": "0.1.0",
+    "webpack-dev-server": "^1.9.0"
   }
 }
