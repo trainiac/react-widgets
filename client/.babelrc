@@ -1,0 +1,3 @@
+{
+  "extends": "../node_modules/trainiac-react-babel-configs/hot-reloader/.babelrc"
+}

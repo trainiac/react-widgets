@@ -1,2 +1,4 @@
-**/builid/**
+**/build/**
 **/node_modules/**
+**/dist/**
+**/coverage/**
