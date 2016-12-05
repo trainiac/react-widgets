@@ -25,6 +25,9 @@ export default function SliderDemo() {
       <br/>
       <br/>
       <Slider
+        min={10}
+        max={70}
+        step={10}
         value={20}
         showLabel
         onChange={handleOnChange}

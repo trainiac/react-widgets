@@ -25,7 +25,7 @@ const SliderHandle = props => {
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       onMouseDown={draggable.handleMouseDown}
-      style={{ left: offsetLeft }}
+      style={{ left: `${offsetLeft}%` }}
     >
       {showLabel && (
         <span className={css(styles.label, styles.corner)}>

@@ -12,6 +12,12 @@
         "exceptions": ["e", "_", "$", "x", "y"]
       }
     ],
-    "prefer-reflect": "off"
+    "prefer-reflect": "off",
+    "no-magic-numbers": [
+      "warn",
+      {
+        "ignore": [-1, 0, 1, 100]
+      }
+    ],
   }
 }

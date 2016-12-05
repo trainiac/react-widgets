@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import fp from 'lodash/fp'
+import round from 'lodash/round'
 import invariant from 'invariant'
 import keycode from 'keycode'
 
@@ -9,11 +10,6 @@ import SliderHandle from 'components/slider/SliderHandle'
 import styles from 'components/slider/Slider.styles'
 
 /*
-  readup on
-    document.onselectstart = null;
-    document.ondragstart = null;
-
-  handleResizing the window
   clean up code where possible
   clean up demo code
 
@@ -21,6 +17,9 @@ import styles from 'components/slider/Slider.styles'
     isDragging
     value
 */
+
+const precision = 6
+const getPercentage = number => round(number, precision) * 100
 
 class Slider extends React.PureComponent {
 
@@ -57,23 +56,12 @@ class Slider extends React.PureComponent {
     }
 
     this.state = state
+    this.stepPercentage = getPercentage(this.props.step / (this.props.max - this.props.min))
 
   }
 
-  componentDidMount() {
+  handleDragStart() {
 
-    setTimeout(() => {
-
-      this.calculateLayout()
-      this.forceUpdate()
-
-    }, 0)
-
-  }
-
-  handleDragStart(e, handle) {
-
-    this.calculateLayout()
     this.startDragValue = this.state.value
 
   }
@@ -81,7 +69,7 @@ class Slider extends React.PureComponent {
   handleDrag(e, handle) {
 
     const handleType = handle.dataset.handleType
-    const position = e.pageX - this.spacing.left
+    const position = this.getRelativeMousePostion(e)
 
     let value = this.positionToValue(position)
     value = this.constrainValue(handleType, value)
@@ -162,7 +150,7 @@ class Slider extends React.PureComponent {
 
   handleClick(e) {
 
-    const position = e.pageX - this.spacing.left
+    const position = this.getRelativeMousePostion(e)
     const value = this.positionToValue(position)
     let update = null
 
@@ -203,15 +191,16 @@ class Slider extends React.PureComponent {
 
     }
 
-
   }
 
-  calculateLayout() {
+  getRelativeMousePostion(e) {
 
-    const stepCount = (this.props.max - this.props.min) / this.props.step
-    this.spacing = this.el.getBoundingClientRect()
-    this.stepPixelDistance = this.spacing.width / stepCount
-    this.hasCalculatedLayout = true
+    const spacing = this.el.getBoundingClientRect()
+    const position = getPercentage(
+      (e.pageX - spacing.left) / spacing.width
+    )
+
+    return position
 
   }
 
@@ -255,7 +244,7 @@ class Slider extends React.PureComponent {
 
   positionToValue(position) {
 
-    const currentStep = Math.round(position / this.stepPixelDistance)
+    const currentStep = Math.round(position / this.stepPercentage)
     const normValue = currentStep * this.props.step
     const value = normValue + this.props.min
 
@@ -265,87 +254,18 @@ class Slider extends React.PureComponent {
 
   valueToPosition(value) {
 
-    if (!this.stepPixelDistance) {
-
-      return 0
-
-    }
-
     const normValue = value - this.props.min
     const currentStep = Math.round(normValue / this.props.step)
-    const position = currentStep * this.stepPixelDistance
+    const position = currentStep * this.stepPercentage
 
     return position
 
   }
 
-  renderMaxHandle() {
-
-    const { isRange, showLabel } = this.props
-    const valueType = this.props.isRange ? 'minValue' : 'value'
-
-    if (!isRange) {
-
-      return null
-
-    }
-
-    return [
-      <div
-        key='hack'
-        style={{
-          left: this.valueToPosition(this.state[valueType]),
-          right: this.spacing.width - this.valueToPosition(this.state.maxValue)
-        }}
-        className={css(styles.range)}
-      />,
-      <SliderHandle
-        key='maxValue'
-        type='maxValue'
-        showLabel={showLabel}
-        labelMessage={String(this.state.maxValue)}
-        offsetLeft={this.valueToPosition(this.state.maxValue)}
-        onKeyDown={this.handleKeyDown}
-        onKeyUp={this.handleKeyUp}
-        onDrag={this.handleDrag}
-        onDragStart={this.handleDragStart}
-        onDragEnd={this.handleDragEnd}
-      />
-    ]
-
-  }
-
-  renderHandles() {
-
-    const { showLabel } = this.props
-    const valueType = this.props.isRange ? 'minValue' : 'value'
-
-    if (!this.hasCalculatedLayout) {
-
-      return null
-
-    }
-
-    return [
-      <SliderHandle
-        key={valueType}
-        type={valueType}
-        showLabel={showLabel}
-        labelMessage={String(this.state[valueType])}
-        offsetLeft={this.valueToPosition(this.state[valueType])}
-        onKeyDown={this.handleKeyDown}
-        onKeyUp={this.handleKeyUp}
-        onDrag={this.handleDrag}
-        onDragStart={this.handleDragStart}
-        onDragEnd={this.handleDragEnd}
-      />,
-      this.renderMaxHandle()
-    ]
-
-  }
-
-
   render() {
+
+    const { showLabel, isRange } = this.props
+    const valueType = this.props.isRange ? 'minValue' : 'value'
 
     return (
       <div
@@ -353,7 +273,42 @@ class Slider extends React.PureComponent {
         onClick={this.handleClick}
         className={css(styles.container, styles.corner)}
       >
-        {this.renderHandles()}
+        <SliderHandle
+          key={valueType}
+          type={valueType}
+          showLabel={showLabel}
+          labelMessage={String(this.state[valueType])}
+          offsetLeft={this.valueToPosition(this.state[valueType])}
+          onKeyDown={this.handleKeyDown}
+          onKeyUp={this.handleKeyUp}
+          onDrag={this.handleDrag}
+          onDragStart={this.handleDragStart}
+          onDragEnd={this.handleDragEnd}
+        />
+
+        {isRange && ([
+          <div
+            key='hack'
+            style={{
+              left: `${this.valueToPosition(this.state[valueType])}%`,
+              right: `${100 - this.valueToPosition(this.state.maxValue)}%`
+            }}
+            className={css(styles.range)}
+          />,
+          <SliderHandle
+            key='maxValue'
+            type='maxValue'
+            showLabel={showLabel}
+            labelMessage={String(this.state.maxValue)}
+            offsetLeft={this.valueToPosition(this.state.maxValue)}
+            onKeyDown={this.handleKeyDown}
+            onKeyUp={this.handleKeyUp}
+            onDrag={this.handleDrag}
+            onDragStart={this.handleDragStart}
+            onDragEnd={this.handleDragEnd}
+          />
+        ])}
+
       </div>
     )
 
