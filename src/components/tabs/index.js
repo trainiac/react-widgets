@@ -114,11 +114,11 @@ export default class Tabs extends PureComponent {
   renderTabs(childComponents) {
 
     return (
-      <div {...css(styles.tabs)}>
-        <div {...css(styles.tabButtons, styles.clearfix)}>
+      <div className={css(styles.tabs)}>
+        <div className={css(styles.tabButtons, styles.clearfix)}>
           {childComponents.buttons}
         </div>
-        <div {...css(styles.tabPanes)}>
+        <div className={css(styles.tabPanes)}>
           {childComponents.panes}
         </div>
       </div>
@@ -135,11 +135,6 @@ export default class Tabs extends PureComponent {
 
 
 Tabs.propTypes = {
-
-  /**
-   * Should be used to pass `Tab` components.
-   */
-  children: PropTypes.node,
 
   /**
    * Callback called after a tab is closed

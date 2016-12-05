@@ -1,1 +1,1 @@
-# React Widgets
+# React Components

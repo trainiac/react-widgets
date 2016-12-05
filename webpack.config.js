@@ -1,6 +1,11 @@
 const resolve = require('path').resolve
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const distPath = resolve(__dirname, 'dist')
+const srcPath = resolve(__dirname, 'src')
+const publicPath = '/'
+
 
 module.exports = {
   entry: [
@@ -13,21 +18,22 @@ module.exports = {
   ],
   output: {
     filename: 'bundle.js',
-    path: resolve(__dirname, 'dist'),
-    publicPath: '/static/'
+    path: distPath,
+    publicPath
   },
-  context: resolve(__dirname, 'src'),
+  context: srcPath,
   resolve: {
     modules: [
       'node_modules',
-      resolve(__dirname, 'src')
+      srcPath
     ]
   },
   devtool: 'inline-source-map',
   devServer: {
     hot: true,
-    contentBase: resolve(__dirname, 'dist'),
-    publicPath: '/static/',
+    contentBase: distPath,
+    outputPath: distPath,
+    publicPath,
     historyApiFallback: true,
     stats: {
       colors: true
@@ -35,6 +41,10 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
+    new CopyWebpackPlugin([
+      { from: 'assets', to: resolve(distPath, 'assets') },
+      { from: resolve(srcPath, 'index.html'), to: resolve(distPath, 'index.html') }
+    ]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
   ],

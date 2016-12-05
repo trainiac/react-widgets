@@ -10,7 +10,7 @@ export default function Tab(props) {
   return (
     <div
       data-tab-id={tabId}
-      {...css(styles.tabPane, isSelected && styles.tabPaneSelected)}
+      className={css(styles.tabPane, isSelected && styles.tabPaneSelected)}
     >
       {children}
     </div>
@@ -19,11 +19,6 @@ export default function Tab(props) {
 }
 
 Tab.propTypes = {
-
-  /**
-   * Should be tab content, text and/or more components
-   */
-  children: PropTypes.node,
 
   /**
    * Determines whether the tab is selected

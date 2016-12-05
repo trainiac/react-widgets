@@ -113,24 +113,24 @@ export default class AccordionKey extends PureComponent {
 
 
     return (
-      <div {...css(styles.key, isOpen && styles.keyOpen)}>
-        <header {...css(styles.keyHeader)}>
+      <div className={css(styles.key, isOpen && styles.keyOpen)}>
+        <header className={css(styles.keyHeader)}>
           <h3
             onClick={this.handleHeaderClick}
-            {...css(
+            className={css(
               styles.keyHeaderTitle,
               isOpen && styles.keyHeaderTitleOpen,
               isDisabled && styles.disabled
             )}
           >
-            <a {...css(styles.keyHeaderButton)}>
+            <a className={css(styles.keyHeaderButton)}>
               {keyText}
             </a>
           </h3>
         </header>
         <section
-          {...css(styles.keyContent)}
-          {...ref(this, 'section')}
+          className={css(styles.keyContent)}
+          ref={ref(this, 'section')}
           style={this.getSectionStyles()}
           onTransitionEnd={this.handleSectionTransitionEnd}
         >
@@ -144,7 +144,6 @@ export default class AccordionKey extends PureComponent {
 }
 
 AccordionKey.propTypes = {
-  children: PropTypes.node,
   isOpen: PropTypes.bool,
   keyId: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,

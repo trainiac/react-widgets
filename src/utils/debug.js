@@ -9,7 +9,7 @@ export const traceFunc = (tag, func) => input => {
 
 }
 
-export const trace = (value, tag = 'No tag:') => {
+export const trace = (tag, value) => {
 
   console.log(tag, value)  // eslint-disable-line no-console
 

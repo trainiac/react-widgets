@@ -1,17 +1,10 @@
 import { styleSheet } from 'utils/styles'
+import helpers from 'styles/helpers'
+import button from 'styles/button'
+import corner from 'styles/corner'
 
 export default styleSheet({
-  clearfix: {
-    ':after': {
-      visibility: 'hidden',
-      display: 'block',
-      fontSize: 0,
-      content: '" "',
-      clear: 'both',
-      height: 0
-    }
-  },
-  disabled: {
-    opacity: 0.5
-  }
+  ...helpers,
+  ...corner,
+  ...button
 })

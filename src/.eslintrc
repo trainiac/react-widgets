@@ -1,3 +1,17 @@
 {
-  "extends": "eslint-config-trainiac/react.js"
+  "extends": "eslint-config-trainiac/react.js",
+  "rules": {
+    "react/prop-types": ["warn", {"ignore": ["children", "params"]}],
+    "react/jsx-no-bind": "off",
+    "no-useless-constructor": "warn",
+    "semi": "warn",
+    "no-return-assign": "off",
+    "id-length": [
+      "warn",
+      {
+        "exceptions": ["e", "_", "$", "x", "y"]
+      }
+    ],
+    "prefer-reflect": "off"
+  }
 }

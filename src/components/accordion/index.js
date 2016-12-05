@@ -220,7 +220,6 @@ export default class Accordion extends PureComponent {
 
 
 Accordion.propTypes = {
-  children: PropTypes.node,
   keyDidClose: PropTypes.func,
   keyWillClose: PropTypes.func,
   keyDidOpen: PropTypes.func,

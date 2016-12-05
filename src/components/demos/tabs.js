@@ -9,7 +9,7 @@ const handleTabWillClose = tabId => console.log(`${tabId} will close`)
 const handleTabDidOpen = tabId => console.log(`${tabId} did open`)
 const handleTabWillOpen = tabId => console.log(`${tabId} will open`)
 
-export default function TabsSection() {
+export default function TabsDemo() {
 
   return (
     <div>

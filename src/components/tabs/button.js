@@ -11,7 +11,7 @@ export default function TabButton(props) {
     <div
       data-tab-id={tabId}
       onClick={onClick}
-      {...css(
+      className={css(
         styles.tabButton,
         isSelected && styles.tabButtonSelected,
         isDisabled && styles.disabled
@@ -24,11 +24,6 @@ export default function TabButton(props) {
 }
 
 TabButton.propTypes = {
-
-  /**
-   * Should be tab content, text and/or more components
-   */
-  children: PropTypes.node,
 
   /**
    * Determines whether the tab is selected

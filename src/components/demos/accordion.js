@@ -16,12 +16,12 @@ const onKeyWillClose = keyId => console.log(`${keyId} will close`)
 const onKeyDidOpen = keyId => console.log(`${keyId} did open`)
 const onKeyWillOpen = keyId => console.log(`${keyId} will open`)
 
-export default function AccordionsSection() {
+export default function AccordionDemo() {
 
   return (
     <div>
       <Accordion
-        {...css(classNames.accordion)}
+        className={css(classNames.accordion)}
         keyDidClose={onKeyDidClose}
         keyWillClose={onKeyWillClose}
         keyDidOpen={onKeyDidOpen}
