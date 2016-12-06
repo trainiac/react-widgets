@@ -4,7 +4,6 @@ import fp from 'lodash/fp'
 
 import styles from 'components/accordion/key.styles'
 import { css } from 'utils/styles'
-import { ref } from 'utils/react'
 
 export default class AccordionKey extends PureComponent {
 
@@ -130,7 +129,7 @@ export default class AccordionKey extends PureComponent {
         </header>
         <section
           className={css(styles.keyContent)}
-          ref={ref(this, 'section')}
+          ref={el => this.section = el}
           style={this.getSectionStyles()}
           onTransitionEnd={this.handleSectionTransitionEnd}
         >

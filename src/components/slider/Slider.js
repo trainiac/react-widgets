@@ -3,9 +3,9 @@ import fp from 'lodash/fp'
 import round from 'lodash/round'
 import invariant from 'invariant'
 import keycode from 'keycode'
+import autobind from 'autobind-decorator'
 
 import { css } from 'utils/styles'
-import BaseReact from 'HOC/BaseReact'
 import SliderHandle from 'components/slider/SliderHandle'
 import styles from 'components/slider/Slider.styles'
 
@@ -22,6 +22,30 @@ const precision = 6
 const getPercentage = number => round(number, precision) * 100
 
 class Slider extends React.PureComponent {
+
+  static propTypes = {
+    isRange: PropTypes.bool,
+    showLabel: PropTypes.bool, // TODO make showingLabel customizable
+    step: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    value: PropTypes.number,
+    minValue: PropTypes.number,
+    maxValue: PropTypes.number,
+    onChange: PropTypes.func
+  }
+
+  static defaultProps = {
+    isRange: false,
+    showLabel: false,
+    step: 1,
+    min: 0,
+    max: 100,
+    value: 0,
+    minValue: 0,
+    maxValue: 100,
+    onChange: fp.noop
+  }
 
   constructor(props) {
 
@@ -60,12 +84,14 @@ class Slider extends React.PureComponent {
 
   }
 
+  @autobind
   handleDragStart() {
 
     this.startDragValue = this.state.value
 
   }
 
+  @autobind
   handleDrag(e, handle) {
 
     const handleType = handle.dataset.handleType
@@ -80,18 +106,23 @@ class Slider extends React.PureComponent {
 
   }
 
+  @autobind
   handleDragEnd(e, handle) {
 
     const handleType = handle.dataset.handleType
     if (this.state[handleType] !== this.startDragValue) {
 
       this.startDragValue = null
-      this.props.onChange(this.getData())
+      this.props.onChange({
+        props: { ...this.props },
+        state: { ... this.state }
+      })
 
     }
 
   }
 
+  @autobind
   handleKeyDown(e) {
 
     const kc = e.keyCode
@@ -127,6 +158,7 @@ class Slider extends React.PureComponent {
 
   }
 
+  @autobind
   handleKeyUp(e) {
 
     const kc = e.keyCode
@@ -142,12 +174,16 @@ class Slider extends React.PureComponent {
     if (this.state[handleType] !== this.startKeyValue) {
 
       this.startKeyValue = null
-      this.props.onChange(this.getData())
+      this.props.onChange({
+        props: { ...this.props },
+        state: { ... this.state }
+      })
 
     }
 
   }
 
+  @autobind
   handleClick(e) {
 
     const position = this.getRelativeMousePostion(e)
@@ -185,7 +221,10 @@ class Slider extends React.PureComponent {
 
       this.setState(update, () => {
 
-        this.props.onChange(this.getData())
+        this.props.onChange({
+          props: { ...this.props },
+          state: { ... this.state }
+        })
 
       })
 
@@ -269,7 +308,7 @@ class Slider extends React.PureComponent {
 
     return (
       <div
-        {...this.ref('el')}
+        ref={el => this.el = el}
         onClick={this.handleClick}
         className={css(styles.container, styles.corner)}
       >
@@ -316,28 +355,4 @@ class Slider extends React.PureComponent {
 
 }
 
-Slider.propTypes = {
-  isRange: PropTypes.bool,
-  showLabel: PropTypes.bool, // TODO make showingLabel customizable
-  step: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
-  value: PropTypes.number,
-  minValue: PropTypes.number,
-  maxValue: PropTypes.number,
-  onChange: PropTypes.func
-}
-
-Slider.defaultProps = {
-  isRange: false,
-  showLabel: false,
-  step: 1,
-  min: 0,
-  max: 100,
-  value: 0,
-  minValue: 0,
-  maxValue: 100,
-  onChange: fp.noop
-}
-
-export default BaseReact(Slider)
+export default Slider

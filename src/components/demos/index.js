@@ -5,9 +5,11 @@ import fp from 'lodash/fp'
 import TabsDemo from 'components/demos/tabs'
 import AccordionDemo from 'components/demos/accordion'
 import ActionMenuDemo from 'components/demos/actionMenu'
+import DatepickerDemo from 'components/demos/datepicker'
+import DialogDemo from 'components/demos/dialog'
 import InfiniteScrollDemo from 'components/demos/infiniteScroll'
 import SliderDemo from 'components/demos/slider'
-import DatepickerDemo from 'components/demos/datepicker'
+
 
 import styles from 'components/demos/index.styles'
 import { css } from 'utils/styles'
@@ -25,6 +27,10 @@ const menuLinks = [{
   text: 'Datepicker',
   to: 'datepicker',
   component: DatepickerDemo
+}, {
+  text: 'Dialog',
+  to: 'Dialog',
+  component: DialogDemo
 }, {
   text: 'Inifinite Scroll',
   to: 'infinitescroll',

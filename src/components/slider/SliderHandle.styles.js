@@ -32,6 +32,6 @@ export default styles.add({
     lineHeight: `${label.height}px`,
     width: label.width,
     top: -(label.height + 5),
-    left: -((label.width - handle.dim)/2) - 2
+    left: -((label.width - handle.dim) / 2) - 2
   }
 }).get()

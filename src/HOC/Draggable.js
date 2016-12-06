@@ -1,20 +1,17 @@
-import React, { PropTypes } from 'react'
-import fp from 'lodash/fp'
+import React from 'react'
+import autobind from 'autobind-decorator'
 
-const DraggableHOC = mapHandlers => WrappedComponent => {
+const DraggableHOC = callbacks => WrappedComponent =>
 
   class Draggable extends React.PureComponent {
 
     constructor(props) {
 
       super(props)
-      this.handlers = mapHandlers(props)
+      this.callbacks = callbacks(props)
       this.state = {
         isDragging: false
       }
-      this.handleMouseDown = this.handleMouseDown.bind(this)
-      this.handleMouseMove = this.handleMouseMove.bind(this)
-      this.handleMouseUp = this.handleMouseUp.bind(this)
 
     }
 
@@ -34,7 +31,7 @@ const DraggableHOC = mapHandlers => WrappedComponent => {
 
     }
 
-    // calculate relative position to the mouse and set isDragging=true
+    @autobind
     handleMouseDown(e) {
 
       // only left mouse button
@@ -45,28 +42,33 @@ const DraggableHOC = mapHandlers => WrappedComponent => {
       })
       this.draggedEl = e.currentTarget
       this.draggedEl.focus()
-      this.handlers.onDragStart(e, this.draggedEl)
+      this.callbacks.onDragStart(e, this.draggedEl)
       e.stopPropagation()
       e.preventDefault()
 
     }
+
+    @autobind
     handleMouseUp(e) {
 
       this.setState({ isDragging: false })
-      this.handlers.onDragEnd(e, this.draggedEl)
+      this.callbacks.onDragEnd(e, this.draggedEl)
       this.draggedEl = null
       e.stopPropagation()
       e.preventDefault()
 
     }
+
+    @autobind
     handleMouseMove(e) {
 
       if (!this.state.isDragging) return
-      this.handlers.onDrag(e, this.draggedEl)
+      this.callbacks.onDrag(e, this.draggedEl)
       e.stopPropagation()
       e.preventDefault()
 
     }
+
     render() {
 
       const propsToTransfer = {
@@ -78,25 +80,8 @@ const DraggableHOC = mapHandlers => WrappedComponent => {
       return <WrappedComponent {...propsToTransfer} {...this.props}/>
 
     }
+
   }
 
-  Draggable.defaultProps = {
-      // allow the initial position to be passed in as a prop
-    onDrag: fp.noop,
-    onDragStart: fp.noop,
-    onDragEnd: fp.noop
-  }
-
-  Draggable.propTypes = {
-    onDrag: PropTypes.func,
-    onDragStart: PropTypes.func,
-    onDragEnd: PropTypes.func
-  }
-
-  return Draggable
-
-}
 
 export default DraggableHOC
-
-
