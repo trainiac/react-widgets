@@ -4,29 +4,9 @@ import ReactDOM from 'react-dom'
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer
 
-/*
- ability to customize position
- ability to position relative to any element
- ability pass in a class or styles
- dialog is center position fixed by default
- easyClose option
- modalOption
- title text option
+const PortalHOC = params => WrappedComponent =>
 
- close on click outside
- close on escape
- reposition on window resize
-
- callbacks
- beforeOpen
- afterOpen
- beforeClose
- afterClose
-*/
-
-export default function PortalHOC(WrappedComponent) {
-
-  return class Portal extends WrappedComponent {
+  class Portal extends WrappedComponent {
 
     static propTypes = {
       portalClassName: PropTypes.string
@@ -40,18 +20,26 @@ export default function PortalHOC(WrappedComponent) {
 
     componentDidMount() {
 
-      this.node = document.createElement('div')
-      this.node.className = this.props.portalClassName
-      document.body.appendChild(this.node)
-      this.renderPortal(this.props)
-      super.componentDidMount()
+      this.maybeRenderPortal(this.props)
+
+      if (super.componentDidMount) {
+
+        super.componentDidMount()
+
+      }
+
 
     }
 
     componentWillReceiveProps(newProps) {
 
-      super.componentWillReceiveProps(newProps)
-      this.renderPortal(newProps)
+      if (super.componentWillReceiveProps) {
+
+        super.componentWillReceiveProps(newProps)
+
+      }
+
+      this.maybeRenderPortal(newProps)
 
     }
 
@@ -62,22 +50,43 @@ export default function PortalHOC(WrappedComponent) {
         super.componentWillUnmount()
 
       }
-      ReactDOM.unmountComponentAtNode(this.node)
-      document.body.removeChild(this.node)
+      ReactDOM.unmountComponentAtNode(this.portal)
+      document.body.removeChild(this.portal)
 
     }
 
 
-    renderPortal(props) {
+    maybeRenderPortal(props) {
 
-      renderSubtreeIntoContainer(
-        this,
-        <WrappedComponent {...props}/>,
-        this.node
-      )
+      if (!this.portal && params(props).shouldRenderPortal) {
+
+        this.portal = document.createElement('div')
+        this.portal.className = this.props.portalClassName
+        document.body.appendChild(this.portal)
+
+      }
+
+      if (this.portal) {
+
+        renderSubtreeIntoContainer(
+          this,
+          <WrappedComponent {...props}/>,
+          this.portal
+        )
+
+      }
+
+
+    }
+
+    render() {
+
+      return null
 
     }
 
   }
 
-}
+
+export default PortalHOC
+

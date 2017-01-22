@@ -6,49 +6,37 @@ import { css } from 'utils/styles'
 import Portal from 'HOC/Portal'
 import styles from 'components/dialog/Dialog.styles'
 
-@Portal
+/*
+  TODO create better effect for opening and closing
+       create events for before after open and close
+       make dialogs prettier
+       styles more configurable
+       make positioning configurable
+       having a closeBtn configurable
+  https://gist.github.com/ryanflorence/fd7e987c832cc4efaa56
+*/
+
+@Portal(props => ({
+  shouldRenderPortal: props.isOpen
+}))
 class Dialog extends React.PureComponent {
+
+  constructor(props) {
+
+    super(props)
+    this.shouldClose = null
+
+  }
 
   static propTypes = {
     isOpen: PropTypes.bool,
     shouldCloseOnOverlayClick: PropTypes.bool,
-    onRequestClose: PropTypes.func
+    onRequestClose: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     isOpen: false,
     shouldCloseOnOverlayClick: true
-  }
-
-  constructor(props) {
-
-    super(props)
-
-    this.state = {
-      isOpen: props.isOpen
-    }
-
-  }
-
-  componentDidMount() {
-
-    /* if (this.props.isOpen) {
-      this.open()
-    }*/
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (!this.state.isOpen && newProps.isOpen) {
-
-      this.setState({ isOpen: true })
-
-    } else if (this.state.isOpen && !newProps.isOpen) {
-
-      this.setState({ isOpen: false })
-
-    }
-
   }
 
   @autobind
@@ -57,7 +45,7 @@ class Dialog extends React.PureComponent {
     if (event.keyCode === keycode('esc')) {
 
       event.preventDefault()
-      this.requestClose(event)
+      this.props.onRequestClose(event)
 
     }
 
@@ -79,7 +67,7 @@ class Dialog extends React.PureComponent {
 
     if (this.shouldClose && this.props.shouldCloseOnOverlayClick) {
 
-      this.requestClose(event)
+      this.props.onRequestClose(event)
 
     }
 
@@ -101,24 +89,10 @@ class Dialog extends React.PureComponent {
 
   }
 
-  requestClose(event) {
-
-    if (this.props.onRequestClose) {
-
-      this.props.onRequestClose(event)
-
-    } else {
-
-      this.setState({ isOpen: false })
-
-    }
-
-  }
-
   render() {
 
     return (
-      (this.state.isOpen ? (
+      (this.props.isOpen ? (
         <div
           className={css(styles.overlay)}
           onMouseDown={this.handleOverlayMouseDown}
